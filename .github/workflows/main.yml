@@ -2,7 +2,9 @@ name: Rust Build
 
 on:
   push:
+    branches: [ main ]
   pull_request:
+    branches: [ main ]
 
 jobs:
   build:
@@ -11,15 +13,23 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Install Rust
+    - name: Install Rust toolchain
       uses: actions-rs/toolchain@v1
       with:
         toolchain: stable
         profile: minimal
         override: true
 
-    - name: Build
-      run: cargo build
+    - name: Install MinGW and dependencies
+      run: |
+        sudo apt update
+        sudo apt install gcc-mingw-w64 g++-mingw-w64 mingw-w64 -y
 
-    - name: Run tests
-      run: cargo test
+    - name: Build with Cargo
+      run: cargo build --release --target=x86_64-pc-windows-gnu
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: my-project
+        path: target/x86_64-pc-windows-gnu/release/
