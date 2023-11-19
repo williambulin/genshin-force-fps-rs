@@ -59,7 +59,7 @@ fn parse_env_args() -> Result<Args, lexopt::Error> {
     let mut game_cwd: Option<String> = None;
     let mut enable_hdr = false;
     let mut fps: i32 = 120;
-    let mut disable_vsync = true;
+    let mut disable_vsync = false;
     let mut game_args: Vec<String> = vec![];
 
     let mut parser = lexopt::Parser::from_env();
